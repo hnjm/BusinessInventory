@@ -9,7 +9,7 @@ public class InventoryContract {
     public static final String CONTENT_AUTHORITY = "com.example.android.businessinventory";
 
     //declare base content URI for content provider
-    private static final Uri BASE_CONTENT_URI = Uri.parse("content:// " + CONTENT_AUTHORITY);
+    private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     //declare path for table name in content provider
     public static final String PATH_INVENTORY = "inventory";

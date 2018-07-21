@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.Toast;
 
 public class InventoryProvider extends ContentProvider {
@@ -48,11 +49,12 @@ public class InventoryProvider extends ContentProvider {
      * Initialize the provider and the database helper object.
      */
 
-    public static InventoryDbHelper inventoryDbHelper;
+    public InventoryDbHelper inventoryDbHelper;
 
     @Override
     public boolean onCreate() {
-        return false;
+        inventoryDbHelper = new InventoryDbHelper(this.getContext());
+        return true;
     }
 
     @Nullable
@@ -134,11 +136,12 @@ public class InventoryProvider extends ContentProvider {
             throw new IllegalArgumentException("Item requires a name");
         }
 
-        if (pricePerUnit != null || pricePerUnit < 0){
-            throw new IllegalArgumentException("Pet requires a name");
+        if (pricePerUnit != null && pricePerUnit < 0){
+            Log.v(this.getClass().getName(), "PRICE PER UNIT: "+pricePerUnit);
+            throw new IllegalArgumentException("pricePerUnit Problem");
         }
         if (quantity != null && quantity < 0){
-            throw new IllegalArgumentException("Pet requires a name");
+            throw new IllegalArgumentException("Quantity problem");
 
         }
 
