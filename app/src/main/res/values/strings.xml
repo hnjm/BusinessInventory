@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">BusinessInventory</string>
     <string name="action_settings">Settings</string>
+    <string name="action_add_dummy_item">Add Dummy Item</string>
+    <string name="action_clear_inventory">Clear Inventory</string>
+    <string name="activity_name_add_new_item">Add New Item</string>
+    <string name="supplier">Supplier</string>
+    <string name="price_per_unit">Price Per Unit</string>
+    <string name="quantity_in_stock">Quantity In Stock</string>
+    <string name="item_name">Item Name</string>
 </resources>

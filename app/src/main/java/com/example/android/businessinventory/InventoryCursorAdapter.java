@@ -59,18 +59,17 @@ public class InventoryCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 //        // TODO: Fill out this method
-//        TextView nameView = (TextView) view.findViewById(R.id.name);
-//        TextView summaryView = (TextView) view.findViewById(R.id.summary);
-//
-//        String name = cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.COLUMN_ITEM_NAME));
-//        String summary = cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.COLUMN_QUANTITY_IN_STOCK));
-//        if (TextUtils.isEmpty(summary)){
-//            summaryView.setText("Unknown Breed");
-//        }
-//        else {
-//            summaryView.setText(summary);
-//        }
-//        nameView.setText(name);
+        TextView nameView = (TextView) view.findViewById(R.id.item_name);
+        TextView priceView = (TextView) view.findViewById(R.id.price);
+        TextView quantityView = (TextView) view.findViewById(R.id.quantity);
+
+        String name = cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.COLUMN_ITEM_NAME));
+        String quantity = cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.COLUMN_QUANTITY_IN_STOCK));
+        String price = cursor.getString(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_PRICE_PER_UNIT));
+
+        nameView.setText(name);
+        priceView.setText(price);
+        quantityView.setText(quantity);
 
     }
 }

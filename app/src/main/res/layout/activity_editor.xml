@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditorActivity"
+    android:orientation="vertical">
+    <EditText
+        android:id="@+id/edit_text_item_name"
+        android:layout_margin="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/item_name"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <EditText
+            android:id="@+id/edit_text_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="@string/quantity_in_stock"/>
+        <EditText
+            android:id="@+id/edit_text_price_per_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:hint="@string/price_per_unit"/>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/edit_text_supplier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/supplier"/>
+
+</LinearLayout>

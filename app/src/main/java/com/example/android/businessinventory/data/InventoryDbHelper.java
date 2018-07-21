@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class InventoryDbHelper extends SQLiteOpenHelper{
+public class InventoryDbHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "inventory.db";
@@ -16,13 +16,12 @@ public class InventoryDbHelper extends SQLiteOpenHelper{
             " REAL NOT NULL, " + InventoryContract.InventoryEntry.COLUMN_SUPPLIER + " TEXT);";
 
     // Create a String that contains the SQL statement to create the pets table
-    String SQL_CREATE_ENTRIES_ =  "CREATE TABLE " + InventoryContract.InventoryEntry.TABLE_NAME + " ("
+    String SQL_CREATE_ENTRIES_ = "CREATE TABLE " + InventoryContract.InventoryEntry.TABLE_NAME + " ("
             + InventoryContract.InventoryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + InventoryContract.InventoryEntry.COLUMN_ITEM_NAME + " TEXT NOT NULL, "
             + InventoryContract.InventoryEntry.COLUMN_QUANTITY_IN_STOCK + " INTEGER NOT NULL DEFAULT 0, "
             + InventoryContract.InventoryEntry.COLUMN_PRICE_PER_UNIT + " REAL NOT NULL DEFAULT 0.00, "
             + InventoryContract.InventoryEntry.COLUMN_SUPPLIER + " TEXT);";
-
 
 
     public static final String SQL_DELETE_ENTRIES = "DROP TABLE " + InventoryContract.InventoryEntry.TABLE_NAME + ";";

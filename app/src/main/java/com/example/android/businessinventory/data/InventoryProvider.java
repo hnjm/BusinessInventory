@@ -14,10 +14,14 @@ import android.widget.Toast;
 
 public class InventoryProvider extends ContentProvider {
 
-    /** URI matcher code for the content URI for the inventory table */
+    /**
+     * URI matcher code for the content URI for the inventory table
+     */
     private static final int INVENTORY = 100;
 
-    /** URI matcher code for the content URI for a single pet in the pets table */
+    /**
+     * URI matcher code for the content URI for a single pet in the pets table
+     */
     private static final int INVENTORY_ID = 101;
 
     /**
@@ -42,7 +46,9 @@ public class InventoryProvider extends ContentProvider {
         sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_INVENTORY + "/#", INVENTORY_ID);
     }
 
-    /** Tag for the log messages */
+    /**
+     * Tag for the log messages
+     */
     public static final String LOG_TAG = InventoryDbHelper.class.getSimpleName();
 
     /**
@@ -87,7 +93,7 @@ public class InventoryProvider extends ContentProvider {
                 // arguments that will fill in the "?". Since we have 1 question mark in the
                 // selection, we have 1 String in the selection arguments' String array.
                 selection = InventoryContract.InventoryEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 // This will perform a query on the pets table where the _id equals 3 to return a
                 // Cursor containing that row of the table.
@@ -100,8 +106,6 @@ public class InventoryProvider extends ContentProvider {
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
-
-
 
 
     /**
@@ -136,25 +140,23 @@ public class InventoryProvider extends ContentProvider {
             throw new IllegalArgumentException("Item requires a name");
         }
 
-        if (pricePerUnit != null && pricePerUnit < 0){
-            Log.v(this.getClass().getName(), "PRICE PER UNIT: "+pricePerUnit);
+        if (pricePerUnit != null && pricePerUnit < 0) {
+            Log.v(this.getClass().getName(), "PRICE PER UNIT: " + pricePerUnit);
             throw new IllegalArgumentException("pricePerUnit Problem");
         }
-        if (quantity != null && quantity < 0){
+        if (quantity != null && quantity < 0) {
             throw new IllegalArgumentException("Quantity problem");
 
         }
 
 
-
-
         SQLiteDatabase petsDatabase = inventoryDbHelper.getWritableDatabase();
         long id = petsDatabase.insert(InventoryContract.InventoryEntry.TABLE_NAME, null, values);
-        if (id == -1){
+        if (id == -1) {
             Toast.makeText(this.getContext(), "Failed to insert row for " + uri.toString(), Toast.LENGTH_SHORT).show();
             return null;
         }
-        getContext().getContentResolver().notifyChange(uri,null);
+        getContext().getContentResolver().notifyChange(uri, null);
         // Once we know the ID of the new row in the table,
         // return the new URI with the ID appended to the end of it
         return ContentUris.withAppendedId(uri, id);
@@ -176,7 +178,7 @@ public class InventoryProvider extends ContentProvider {
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
                 selection = InventoryContract.InventoryEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateItem(uri, contentValues, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
@@ -191,44 +193,41 @@ public class InventoryProvider extends ContentProvider {
     private int updateItem(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
         //Sanity checks for proper updating values
-        if(values.containsKey(InventoryContract.InventoryEntry.COLUMN_ITEM_NAME)){
+        if (values.containsKey(InventoryContract.InventoryEntry.COLUMN_ITEM_NAME)) {
             String name = values.getAsString(InventoryContract.InventoryEntry.COLUMN_ITEM_NAME);
             if (name == null) {
                 throw new IllegalArgumentException("Item requires a name");
-            }}
+            }
+        }
 
 //        String breed = values.getAsString(PetContract.PetEntry.COLUMN_PET_BREED);
-        if(values.containsKey(InventoryContract.InventoryEntry.COLUMN_PRICE_PER_UNIT)) {
+        if (values.containsKey(InventoryContract.InventoryEntry.COLUMN_PRICE_PER_UNIT)) {
             Integer pricePerUnit = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_PRICE_PER_UNIT);
-            if (pricePerUnit != null || pricePerUnit < 0){
+            if (pricePerUnit != null || pricePerUnit < 0) {
                 throw new IllegalArgumentException("Pet requires a name");
             }
         }
 
-        if(values.containsKey(InventoryContract.InventoryEntry.COLUMN_QUANTITY_IN_STOCK)) {
+        if (values.containsKey(InventoryContract.InventoryEntry.COLUMN_QUANTITY_IN_STOCK)) {
             Integer quantity = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_QUANTITY_IN_STOCK);
-            if (quantity != null && quantity < 0){
+            if (quantity != null && quantity < 0) {
                 throw new IllegalArgumentException("Pet requires a name");
 
             }
         }
 
 
-
-
-
-
-        if (values.size() == 0){
+        if (values.size() == 0) {
             return 0;
         }
 
 
         // TODO: Update the selected pets in the pets database table with the given ContentValues
         SQLiteDatabase sqLiteDatabase = inventoryDbHelper.getWritableDatabase();
-        getContext().getContentResolver().notifyChange(uri,null);
+        getContext().getContentResolver().notifyChange(uri, null);
         // TODO: Return the number of rows that were affected
-        return  sqLiteDatabase.update(InventoryContract.InventoryEntry.TABLE_NAME, values, selection, selectionArgs);
-}
+        return sqLiteDatabase.update(InventoryContract.InventoryEntry.TABLE_NAME, values, selection, selectionArgs);
+    }
 
     /**
      * Delete the data at the given selection and selection arguments.
@@ -241,14 +240,14 @@ public class InventoryProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case INVENTORY:
-                getContext().getContentResolver().notifyChange(uri,null);
+                getContext().getContentResolver().notifyChange(uri, null);
                 // Delete all rows that match the selection and selection args
                 return database.delete(InventoryContract.InventoryEntry.TABLE_NAME, selection, selectionArgs);
             case INVENTORY_ID:
                 // Delete a single row given by the ID in the URI
                 selection = InventoryContract.InventoryEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                getContext().getContentResolver().notifyChange(uri,null);
+                getContext().getContentResolver().notifyChange(uri, null);
                 return database.delete(InventoryContract.InventoryEntry.TABLE_NAME, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);

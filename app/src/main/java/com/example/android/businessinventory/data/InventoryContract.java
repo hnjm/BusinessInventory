@@ -17,7 +17,7 @@ public class InventoryContract {
     //declare content uri for the inventory table for searching the database
     public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_INVENTORY);
 
-    public static abstract class InventoryEntry implements BaseColumns{
+    public static abstract class InventoryEntry implements BaseColumns {
 
         //declare table name
         public static final String TABLE_NAME = "inventory";
