@@ -1,12 +1,14 @@
 package com.example.android.businessinventory;
 
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -58,6 +61,14 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         //set the cursor adapter onto the listview in the catalog activity
         ListView listView = (ListView) findViewById(R.id.list_view);
         listView.setAdapter(inventoryCursorAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                editItemClicked(id);
+
+            }
+        });
 
         getLoaderManager().initLoader(0, null, this);
     }
@@ -128,8 +139,11 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         startActivity(intent);
     }
 
-    private void editItemClicked(){
-
+    private void editItemClicked(long id){
+        Intent intent = new Intent(this, EditorActivity.class);
+        Uri itemUri = ContentUris.withAppendedId(InventoryContract.CONTENT_URI, id);
+        intent.setData(itemUri);
+        startActivity(intent);
     }
 
 //    private void displayInfo(){

@@ -203,15 +203,15 @@ public class InventoryProvider extends ContentProvider {
 //        String breed = values.getAsString(PetContract.PetEntry.COLUMN_PET_BREED);
         if (values.containsKey(InventoryContract.InventoryEntry.COLUMN_PRICE_PER_UNIT)) {
             Integer pricePerUnit = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_PRICE_PER_UNIT);
-            if (pricePerUnit != null || pricePerUnit < 0) {
-                throw new IllegalArgumentException("Pet requires a name");
+            if (pricePerUnit != null && pricePerUnit < 0) {
+                throw new IllegalArgumentException("Problem Price Per Unit");
             }
         }
 
         if (values.containsKey(InventoryContract.InventoryEntry.COLUMN_QUANTITY_IN_STOCK)) {
             Integer quantity = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_QUANTITY_IN_STOCK);
             if (quantity != null && quantity < 0) {
-                throw new IllegalArgumentException("Pet requires a name");
+                throw new IllegalArgumentException("Problem Quantity");
 
             }
         }

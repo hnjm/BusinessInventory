@@ -63,12 +63,12 @@ public class InventoryCursorAdapter extends CursorAdapter {
         TextView priceView = (TextView) view.findViewById(R.id.price);
         TextView quantityView = (TextView) view.findViewById(R.id.quantity);
 
-        String name = cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.COLUMN_ITEM_NAME));
-        String quantity = cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.COLUMN_QUANTITY_IN_STOCK));
-        String price = cursor.getString(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_PRICE_PER_UNIT));
+        String name = cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.COLUMN_ITEM_NAME)).trim();
+        String quantity = cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.COLUMN_QUANTITY_IN_STOCK)).trim();
+        String price = cursor.getString(cursor.getColumnIndexOrThrow(InventoryEntry.COLUMN_PRICE_PER_UNIT)).trim();
 
         nameView.setText(name);
-        priceView.setText(price);
+        priceView.setText("$" + price);
         quantityView.setText(quantity);
 
     }

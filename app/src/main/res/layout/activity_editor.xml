@@ -21,6 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="number"
+            android:shadowColor = "@color/editorColorPrimary"
             android:hint="@string/quantity_in_stock"/>
         <EditText
             android:id="@+id/edit_text_price_per_unit"

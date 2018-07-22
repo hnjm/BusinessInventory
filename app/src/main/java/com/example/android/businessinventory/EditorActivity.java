@@ -1,9 +1,14 @@
 package com.example.android.businessinventory;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -14,7 +19,7 @@ import android.widget.Toast;
 import com.example.android.businessinventory.data.InventoryContract;
 import com.example.android.businessinventory.data.InventoryContract.InventoryEntry;
 
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
     /**
      * declare passed in uri that is extracted from the intent passed from the Catalog Activity
@@ -24,13 +29,13 @@ public class EditorActivity extends AppCompatActivity {
     /**
      * declare the four edit text fields to add/edit for the database
      */
-    private EditText mItemName;
+    private EditText mItemNameEditText;
 
-    private EditText mQuantity;
+    private EditText mQuantityEditText;
 
-    private EditText mPrice;
+    private EditText mPriceEditText;
 
-    private EditText mSupplier;
+    private EditText mSupplierEditText;
 
     private String LOG_TAG = this.getClass().getName();
 
@@ -54,13 +59,23 @@ public class EditorActivity extends AppCompatActivity {
 
         mItemUri = getIntent().getData();
 
-        mItemName = (EditText) findViewById(R.id.edit_text_item_name);
+        if(mItemUri == null){
+            setTitle(R.string.activity_name_add_new_item);
 
-        mPrice = (EditText) findViewById(R.id.edit_text_price_per_unit);
+        }
+        else{
+            setTitle("Edit item");
+            getLoaderManager().initLoader(0, null, this);
 
-        mQuantity = (EditText) findViewById(R.id.edit_text_quantity);
+        }
 
-        mSupplier = (EditText) findViewById(R.id.edit_text_supplier);
+        mItemNameEditText = (EditText) findViewById(R.id.edit_text_item_name);
+
+        mPriceEditText = (EditText) findViewById(R.id.edit_text_price_per_unit);
+
+        mQuantityEditText = (EditText) findViewById(R.id.edit_text_quantity);
+
+        mSupplierEditText = (EditText) findViewById(R.id.edit_text_supplier);
 
     }
 
@@ -90,10 +105,10 @@ public class EditorActivity extends AppCompatActivity {
 
     private void savePet(){
         ContentValues contentValues = new ContentValues();
-        String name = mItemName.getText().toString().trim();
-        String supplier = mSupplier.getText().toString().trim();
-        Float price = Float.parseFloat(mPrice.getText().toString().trim());
-        Integer quantity = Integer.parseInt(mQuantity.getText().toString().trim());
+        String name = mItemNameEditText.getText().toString().trim();
+        String supplier = mSupplierEditText.getText().toString().trim();
+        Float price = Float.parseFloat(mPriceEditText.getText().toString().trim());
+        Integer quantity = Integer.parseInt(mQuantityEditText.getText().toString().trim());
 
         contentValues.put(InventoryEntry.COLUMN_ITEM_NAME, name);
         contentValues.put(InventoryEntry.COLUMN_PRICE_PER_UNIT, price);
@@ -102,10 +117,46 @@ public class EditorActivity extends AppCompatActivity {
         if (mItemUri == null){
             getContentResolver().insert(InventoryContract.CONTENT_URI, contentValues);
         }
+        else {
+            getContentResolver().update(mItemUri, contentValues, null, null);
+        }
     }
     private void deletePet(){
         if (mItemUri != null){
-            getContentResolver().delete(InventoryContract.CONTENT_URI, null, null);
+            getContentResolver().delete(mItemUri, null, null);
         }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.v(LOG_TAG, "On Create Loader");
+        String[] projection = {InventoryEntry._ID, InventoryEntry.COLUMN_ITEM_NAME, InventoryEntry.COLUMN_PRICE_PER_UNIT, InventoryEntry.COLUMN_SUPPLIER, InventoryEntry.COLUMN_QUANTITY_IN_STOCK};
+
+        return new CursorLoader(this, mItemUri, projection, null,
+                null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.v(LOG_TAG, "On Load Finished");
+        if(data.moveToFirst()) {
+            String name = data.getString(data.getColumnIndexOrThrow(InventoryEntry.COLUMN_ITEM_NAME));
+            String price = data.getString(data.getColumnIndexOrThrow(InventoryEntry.COLUMN_PRICE_PER_UNIT));
+            String quantity = data.getString(data.getColumnIndexOrThrow(InventoryEntry.COLUMN_QUANTITY_IN_STOCK));
+            String supplier = data.getString(data.getColumnIndexOrThrow(InventoryEntry.COLUMN_SUPPLIER));
+            mItemNameEditText.setText(name);
+            mPriceEditText.setText(price);
+            mQuantityEditText.setText(quantity);
+            mSupplierEditText.setText(supplier);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        Log.v(LOG_TAG, "On Loader Reset");
+        mSupplierEditText.getText().clear();
+        mQuantityEditText.getText().clear();
+        mPriceEditText.getText().clear();
+        mItemNameEditText.getText().clear();
     }
 }
